@@ -1,6 +1,7 @@
 node_modules/
 dist/
-out/
+native/*.exe
+UserData/
 .edge-profile*/
 *.log
-npm-debug.log*
+native/WebView2Loader.dll

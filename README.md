@@ -6,9 +6,12 @@
 
 ## 下载
 
-到 [Releases](../../releases) 下载 `Minesweeper-NoGuess-1.0.0.exe`，双击即玩（Windows x64，免安装）。
+到 [Releases](../../releases) 下载 `Minesweeper-NoGuess-1.0.0.exe`，双击即玩。
 
-也可以直接使用网页版：打开 `index.html` 即可。
+- Windows 10/11 x64，单文件约 1 MB，免安装；
+- 依赖系统自带的 **WebView2 Runtime**（Win11 自带；Win10 若缺失会提示，可从微软官网安装）。
+
+也可以直接用网页版：打开 `index.html` 即可。
 
 ## 玩法
 
@@ -17,11 +20,9 @@
 | 左键未翻开格 | 翻开 |
 | 右键未翻开格 | 插旗 / 取消 |
 | 左键已翻开数字 | 快速排雷（旗数等于数字时翻开周围） |
-| 手机 / 触屏长按 | 插旗 |
+| 触屏长按 | 插旗 |
 
 五档难度：入门 9×9/8、初级 9×9/10、中级 16×16/40、高级 30×16/99、专家 30×20/130。
-
-顶部按钮：
 
 - **提示**：高亮一个可以推导出来的安全格或雷格；
 - **自动推演**：只用逻辑把整盘走完，用来证明这局确实不需要猜。
@@ -36,20 +37,29 @@
 
 只要出现一步推不动，这个棋盘就作废重来。因此每一步都存在可推导的走法。
 
-## 从源码运行
+## 项目结构
 
-```bash
-npm install
-npm start
+```
+├── index.html / style.css / game.js   游戏本体（纯前端，可直接双击）
+├── native/
+│   ├── app.cs                         Windows 桌面壳（WinForms + WebView2）
+│   └── build.ps1                      打包脚本（csc + WebView2 SDK）
+├── build/icon.ico                     应用图标
+├── tests/                             Node 测试脚本
+└── screenshots/                       预览图
 ```
 
-## 打包 exe
+## 构建 Windows exe
 
-```bash
-npm run dist
+需要：
+- Windows 自带的 .NET Framework 4.x（`csc.exe`）；
+- [Microsoft.Web.WebView2](https://www.nuget.org/packages/Microsoft.Web.WebView2) NuGet 包（脚本会自动下载）。
+
+```powershell
+powershell -ExecutionPolicy Bypass -File native/build.ps1
 ```
 
-会在 `dist/` 下生成 `Minesweeper-NoGuess-1.0.0.exe`（Electron portable，单文件）。
+产物在 `native/MinesweeperNoGuess.exe`，单文件，运行时把 `WebView2Loader.dll` 释放到同级目录（无写入权限时回退到临时目录）。
 
 ## 测试
 
@@ -61,7 +71,7 @@ node tests/test_levels.js    # 五档难度生成成功率与耗时
 ## 技术
 
 - 游戏本体：原生 HTML / CSS / JavaScript，无框架、无依赖；
-- 桌面壳：Electron（`main.js` 只负责开窗口加载本地页面）；
+- 桌面壳：C# WinForms + WebView2，把 HTML/CSS/JS 内联后交给 WebView2 渲染；
 - 求解器思路参考 [JSMinesweeper](https://github.com/DavidNHill/JSMinesweeper)（MIT）。
 
 ## License
