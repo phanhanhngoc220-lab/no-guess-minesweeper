@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>扫雷 · 无猜模式</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+    <header class="top">
+        <div class="brand">
+            <span class="logo">💣</span>
+            <h1>扫雷</h1>
+            <span id="noGuessBadge" class="badge">无猜模式</span>
+        </div>
+        <div class="diffs" role="tablist" aria-label="难度">
+            <button class="diff-btn" data-diff="entry" type="button">入门 <small>9×9 · 8</small></button>
+            <button class="diff-btn active" data-diff="beginner" type="button">初级 <small>9×9 · 10</small></button>
+            <button class="diff-btn" data-diff="intermediate" type="button">中级 <small>16×16 · 40</small></button>
+            <button class="diff-btn" data-diff="expert" type="button">高级 <small>30×16 · 99</small></button>
+            <button class="diff-btn" data-diff="master" type="button">专家 <small>30×20 · 130</small></button>
+        </div>
+    </header>
+
+    <section class="hud">
+        <div class="stat">
+            <span class="label">剩余雷数</span>
+            <strong id="mineLeft">10</strong>
+        </div>
+        <div class="stat">
+            <span class="label">用时</span>
+            <strong id="timer">00:00</strong>
+        </div>
+        <div class="actions">
+            <button id="newGame" class="btn primary" type="button">新游戏</button>
+            <button id="hint" class="btn" type="button">提示</button>
+            <button id="demo" class="btn" type="button">自动推演</button>
+        </div>
+    </section>
+
+    <main class="board-wrap">
+        <div id="board" class="board" aria-label="扫雷棋盘"></div>
+    </main>
+
+    <p id="status" class="status">点击任意格子开始 · 棋盘会现场生成并验证无需猜测</p>
+
+    <footer class="note">
+        生成器会用求解器把整盘推演一遍（单点规则 → 子集规则 → 约束分量穷举），
+        只有全程不需要猜的棋盘才会开始。
+    </footer>
+</div>
+
+<div id="overlay" class="overlay" role="dialog" aria-modal="true">
+    <div class="card">
+        <h2 id="overlayTitle">正在生成棋盘</h2>
+        <p id="overlayText"></p>
+        <button id="overlayBtn" class="btn primary" type="button"></button>
+    </div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
